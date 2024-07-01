@@ -1,0 +1,12 @@
+appId: dev.maljkovich.gimmick
+productName: Gimmick AI
+copyright: Copyright © 2024 Gabriel L. Maljkovich
+directories:
+  output: dist
+  buildResources: resources
+files:
+  - from: .
+    filter:
+      - package.json
+      - app
+publish: null
