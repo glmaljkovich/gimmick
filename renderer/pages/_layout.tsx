@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { Sidebar } from "@/components/Sidebar";
-import { GradientBar } from "@/components/GradientBlob";
+import { GradientBar } from "@/components/gradient/Gradient";
 import { Bitter } from "next/font/google";
 
 const bitter = Bitter({ display: "swap", subsets: ["latin"] });

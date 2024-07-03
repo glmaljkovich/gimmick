@@ -1,4 +1,4 @@
-import { Chat } from "@/components/Chat";
+import { Chat } from "@/components/chat/Chat";
 import { useContext, useState, useEffect } from "react";
 import { twMerge } from "tailwind-merge";
 import cn from "classnames";
