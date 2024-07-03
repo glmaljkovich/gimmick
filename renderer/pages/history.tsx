@@ -38,18 +38,18 @@ export default function History() {
     chats: IChat[];
     chatId: string | null;
   }) => {
-    return chats.sort().map((chat) => {
+    return chats.sort(sortByCreatedAt).map((chat) => {
       return (
         <div
           key={chat.id}
           id={chat.id}
           className={twMerge(
             cn(
+              "grid grid-cols-10 pl-2 pb-2 pt-4 w-48 text-white/75 leading-snug tracking-wide text-xs font-bold border-b border-b-white/20 hover:bg-white/15 cursor-pointer",
               {
                 "text-white text-bold":
                   chat.id.toString() === chatId?.toString(),
               },
-              "grid grid-cols-10 pl-2 pt-4 min-w-48 leading-snug text-sm border-b border-b-white/20 hover:bg-white/15 cursor-pointer",
             ),
           )}
         >

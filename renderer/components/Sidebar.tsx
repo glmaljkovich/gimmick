@@ -49,7 +49,7 @@ export function Sidebar() {
   return (
     <div className="relative flex flex-col w-1/12 min-w-20 h-screen text-white">
       <div className="z-10 flex flex-col grow py-4 px-2 font-light">
-        <div className="flex flex-col text-center text-teal-300 font-bold tracking-wide mx-1 mt-2 text-sm">
+        <div className="flex flex-col text-center text-teal-300 font-bold tracking-wide mt-2 text-sm">
           <span className="text-xl">✨</span> gimmick
         </div>
         <div className="flex grow justify-center flex-col gap-4">
@@ -78,12 +78,14 @@ export function Sidebar() {
             icon={<LuFiles />}
           />
         </div>
-        <SidebarAction
-          selectedTab={selectedTab}
-          action={() => openTab("settings")}
-          text="Settings"
-          icon={<IoCog />}
-        />
+        <div className="mt-12">
+          <SidebarAction
+            selectedTab={selectedTab}
+            action={() => openTab("settings")}
+            text="Settings"
+            icon={<IoCog />}
+          />
+        </div>
       </div>
       <div className="flex"></div>
     </div>

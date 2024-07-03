@@ -1,0 +1,32 @@
+.ai-message h1 {
+    @apply text-3xl;
+}
+
+.ai-message h2 {
+    @apply text-2xl;
+}
+
+.ai-message h3 {
+    @apply text-xl;
+}
+
+.ai-message h4 {
+    @apply text-lg;
+}
+
+.ai-message h5 {
+    @apply text-base font-bold;
+}
+
+.ai-message strong {
+    @apply font-bold;
+}
+
+.ai-message code:not(.hljs) {
+    color: #ff7b72;
+    background: #0d1117;
+}
+
+.ai-message {
+    width: calc(100% - 64px);
+}
