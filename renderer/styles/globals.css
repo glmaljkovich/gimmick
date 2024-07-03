@@ -4,6 +4,9 @@
 
 @layer base {
     body {
-        @apply bg-slate-950 text-white;
+        @apply bg-slate-950 text-white overflow-hidden h-screen;
+    }
+    #__next {
+        @apply h-full;
     }
 }

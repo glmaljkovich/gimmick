@@ -1,5 +1,17 @@
 import classNames from "classnames";
 import { motion, RepeatType } from "framer-motion";
+import { twMerge } from "tailwind-merge";
+import "./gradient.css";
+export function GradientBar({ className }) {
+  return (
+    <div
+      className={twMerge(
+        "gradient absolute blur-3xl bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500",
+        className,
+      )}
+    />
+  );
+}
 
 type GradientBlobProps = {
   from?: string;
@@ -39,7 +51,7 @@ export function GradientBlob(props: GradientBlobProps) {
   };
 
   const classes = classNames(
-    "absolute blur-2xl rounded-full",
+    "absolute blur-3xl filter rounded-full",
     `bg-gradient-to-r`,
     gradient.from,
     gradient.via,
@@ -50,9 +62,8 @@ export function GradientBlob(props: GradientBlobProps) {
 
   const blobVariants = {
     animate: {
-      scale: [0.8, 1.2, 0.8],
-      x: [0, 20, 0],
-      y: [0, -20, 0],
+      x: ["-50%", "-40%", "-50%"],
+      y: ["-50%", "-40%", "-50%"],
       rotate: [0, 180, 360],
       height: blob.height,
       width: blob.width,
