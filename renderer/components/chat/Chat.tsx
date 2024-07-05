@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 import { motion } from "framer-motion";
 import { IChat, IMessage } from "../../../main/store";
 import { ChatContext } from "@/pages/_chatProvider";
-import { AutoResizingTextarea } from "./AutoResizingTextArea";
+import { ChatBox } from "./Chatbox";
 import ReactMarkdown from "react-markdown";
 import rehypeHighlight from "rehype-highlight";
 import "highlight.js/styles/github-dark.css";
@@ -166,7 +166,7 @@ export function Chat() {
           <div ref={messagesEndRef}></div>
         </div>
       </div>
-      <AutoResizingTextarea
+      <ChatBox
         value={input}
         onChange={handleInputChange}
         handleSubmit={handleSubmit}
