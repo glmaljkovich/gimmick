@@ -15,10 +15,12 @@ export interface IChat {
 
 export interface IStore {
   chats: IChat[];
+  apiKey: string;
 }
 
 const defaults: IStore = {
   chats: [],
+  apiKey: "",
 };
 
 export const store = new Store<IStore>({ defaults, name: "chat" });
@@ -52,8 +54,8 @@ export const initiliazeStore = (ipcMain: Electron.IpcMain) => {
     const chats = store.get("chats");
     const { id } = arg;
     const chat = chats.find((chat) => chat.id === id);
-    console.log("chat history", chat.messages);
-    event.reply("chat-history", chat.messages);
+    console.log("chat history", chat?.messages);
+    event.reply("chat-history", chat?.messages);
   });
 
   ipcMain.on("delete-chat", (_event, arg) => {
@@ -61,5 +63,13 @@ export const initiliazeStore = (ipcMain: Electron.IpcMain) => {
     const index = chats.findIndex((chat) => chat.id === arg);
     chats.splice(index, 1);
     store.set("chats", chats);
+  });
+
+  ipcMain.on("set-api-key", (_event, arg) => {
+    store.set("apiKey", arg);
+  });
+
+  ipcMain.on("get-api-key", (event) => {
+    event.reply("api-key", store.get("apiKey"));
   });
 };

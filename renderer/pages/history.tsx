@@ -3,7 +3,7 @@ import { useContext, useState, useEffect } from "react";
 import { twMerge } from "tailwind-merge";
 import cn from "classnames";
 import { IChat } from "../../main/store";
-import { ChatContext } from "./_chatProvider";
+import { ChatContext } from "@/components/_chatProvider";
 
 export default function History() {
   const { chatId, setChatId } = useContext(ChatContext);

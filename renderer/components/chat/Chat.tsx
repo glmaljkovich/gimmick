@@ -5,7 +5,7 @@ import Image from "next/image";
 import { v4 as uuidv4 } from "uuid";
 import { motion } from "framer-motion";
 import { IChat, IMessage } from "../../../main/store";
-import { ChatContext } from "@/pages/_chatProvider";
+import { ChatContext } from "@/components/_chatProvider";
 import { ChatBox } from "./Chatbox";
 import ReactMarkdown from "react-markdown";
 import rehypeHighlight from "rehype-highlight";
@@ -104,6 +104,7 @@ export function Chat() {
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
   const { messages, setMessages, input, handleInputChange, handleSubmit } =
     useChat({
+      api: "http://localhost:3001/api/stream",
       onFinish: (msg) => {
         if (chatId === null) {
           const uuid = uuidv4() as string;

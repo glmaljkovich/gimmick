@@ -1,4 +1,4 @@
-import { ChatContext } from "@/pages/_chatProvider";
+import { ChatContext } from "@/components/_chatProvider";
 import { useContext, useState } from "react";
 import { FaRegNewspaper } from "react-icons/fa6";
 import { MdLanguage } from "react-icons/md";

@@ -1,7 +1,7 @@
 import React from "react";
 import type { AppProps } from "next/app";
-import { ChatProvider } from "./_chatProvider";
-import Layout from "./_layout";
+import { ChatProvider } from "@/components/_chatProvider";
+import Layout from "@/components/_layout";
 
 import "../styles/globals.css";
 

@@ -8,7 +8,7 @@ import { IoCog } from "react-icons/io5";
 import { useRouter } from "next/router";
 import cn from "classnames";
 import { IChat } from "../../main/store";
-import { ChatContext } from "@/pages/_chatProvider";
+import { ChatContext } from "@/components/_chatProvider";
 import { twMerge } from "tailwind-merge";
 
 export function Sidebar() {
