@@ -27,6 +27,10 @@
     background: #0d1117;
 }
 
+.ai-message a {
+    @apply text-teal-500 bg-gradient-to-tr from-purple-500/20 to-orange-500/20 p-1 rounded-md;
+}
+
 .ai-message {
     width: calc(100% - 64px);
 }

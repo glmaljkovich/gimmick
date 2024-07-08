@@ -8,11 +8,12 @@ import { IoCog } from "react-icons/io5";
 import { useRouter } from "next/router";
 import cn from "classnames";
 import { IChat } from "../../main/store";
-import { ChatContext } from "@/components/_chatProvider";
+import { AppContext } from "@/components/contextProvider";
 import { twMerge } from "tailwind-merge";
 
 export function Sidebar() {
-  const { setChatId } = useContext(ChatContext);
+  const { chat } = useContext(AppContext);
+  const { setChatId } = chat!;
   const [selectedTab, setSelectedTab] = useState("ask");
   const router = useRouter();
 

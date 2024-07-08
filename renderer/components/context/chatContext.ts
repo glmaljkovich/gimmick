@@ -1,33 +1,29 @@
-import { createContext, useState } from "react";
+import { useState } from "react";
 
-export const ChatContext = createContext<{
+export type ChatContextType = {
   chatId: string | null;
   setChatId: (chatId: string | null) => void;
   mode: string;
   modes: string[];
   setMode: (mode: string) => void;
-}>({
-  chatId: null,
-  setChatId: () => {},
-  mode: "generate",
-  modes: ["generate"],
-  setMode: () => {},
-});
+  generatingAnswer: boolean;
+  setGeneratingAnswer: (generatingAnswer: boolean) => void;
+};
 
-export function ChatProvider({ children }) {
+export const useChatContext = () => {
   const [chatId, setChatId] = useState<string | null>(null);
   const [mode, setMode] = useState("generate");
   const modes = ["generate", "search", "news", "academic"];
+  const [generatingAnswer, setGeneratingAnswer] = useState(false);
 
-  const context = {
+  const context: ChatContextType = {
     chatId,
     setChatId,
     mode,
     modes,
     setMode,
+    generatingAnswer,
+    setGeneratingAnswer,
   };
-
-  return (
-    <ChatContext.Provider value={context}>{children}</ChatContext.Provider>
-  );
-}
+  return context;
+};

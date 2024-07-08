@@ -1,4 +1,4 @@
-import { ChatContext } from "@/components/_chatProvider";
+import { AppContext } from "@/components/contextProvider";
 import { useContext, useState } from "react";
 import { FaRegNewspaper } from "react-icons/fa6";
 import { MdLanguage } from "react-icons/md";
@@ -6,7 +6,8 @@ import { FaBuildingColumns } from "react-icons/fa6";
 import { FaMagic } from "react-icons/fa";
 
 export const ModeSelector = () => {
-  const { mode, setMode, modes } = useContext(ChatContext);
+  const { chat } = useContext(AppContext);
+  const { mode, setMode, modes } = chat!;
   const [isOpen, setIsOpen] = useState(false);
   const handleModeChange = (mode) => {
     setMode(mode);

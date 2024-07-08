@@ -3,17 +3,19 @@ import { useContext, useState, useEffect } from "react";
 import { twMerge } from "tailwind-merge";
 import cn from "classnames";
 import { IChat } from "../../main/store";
-import { ChatContext } from "@/components/_chatProvider";
+import { AppContext } from "@/components/contextProvider";
 
 export default function History() {
-  const { chatId, setChatId } = useContext(ChatContext);
+  const { chat } = useContext(AppContext);
+  const { chatId, setChatId } = chat!;
   const [chats, setChats] = useState<IChat[]>([]);
   useEffect(() => {
     window.ipc.on("chats", (messages: IChat[]) => {
-      setChats(messages);
+      // get only the last 10 messages
+      setChats(messages.slice(-10));
     });
 
-    window.ipc.send("get-chats", null);
+    window.ipc.send("chat.get-chats", null);
   }, []);
 
   const loadChat = (chatId: string) => {
@@ -23,8 +25,8 @@ export default function History() {
 
   const deleteChat = (chatId: string) => {
     console.log("deleteChat", chatId);
-    window.ipc.send("delete-chat", chatId);
-    window.ipc.send("get-chats", null);
+    window.ipc.send("chat.delete-chat", chatId);
+    window.ipc.send("chat.get-chats", null);
   };
 
   const sortByCreatedAt = (a: IChat, b: IChat) => {

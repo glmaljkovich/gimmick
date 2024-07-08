@@ -1,11 +1,11 @@
 import { ModeSelector } from "./ModeSelector";
-import { useRef, KeyboardEventHandler } from "react";
+import { useRef, KeyboardEventHandler, FormEventHandler } from "react";
 import { LuPlusCircle, LuSendHorizonal } from "react-icons/lu";
 
 type ChatBoxProps = {
   value: string;
   onChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
-  handleSubmit?: () => void;
+  handleSubmit?: FormEventHandler<HTMLFormElement>;
 };
 
 export const ChatBox = ({ value, onChange, handleSubmit }: ChatBoxProps) => {

@@ -1,22 +1,18 @@
-import { useEffect, useState } from "react";
+import { AppContext } from "@/components/contextProvider";
+import { useContext } from "react";
 
 // takes an api key from an input component and send it to the store via ipc
 const ApiKeyInput = () => {
-  const [apiKey, setApiKey] = useState("");
+  const { model } = useContext(AppContext);
+  const { apiKey, setApiKey } = model!;
+
   const handleApiKeyChange = (e) => {
     setApiKey(e.target.value);
   };
   const handleApiKeySubmit = () => {
     console.log("submitting api key", apiKey);
-    window.ipc.send("set-api-key", apiKey);
+    window.ipc.send("model.set-api-key", apiKey);
   };
-  useEffect(() => {
-    window.ipc.on("api-key", (arg: string) => {
-      console.log("api key received", arg);
-      setApiKey(arg);
-    });
-    window.ipc.send("get-api-key", null);
-  });
   return (
     <div className="flex flex-col p-2">
       <input
