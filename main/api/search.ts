@@ -24,7 +24,7 @@ export async function executeChain(apiKey: string, input: string) {
   });
   const promptImprover = ChatPromptTemplate.fromTemplate(`
     Take this question from the user and modify it to accurately find search results on the web.
-    Your output will be fed to DuckDuckGo. You can include keywords like linkedin, wikipedia, github, imdb, etc.
+    Your output will be fed to DuckDuckGo.
     Don't wrap the question in quotes.
     Question: "{input}"
     Improved DuckDuckGo search query:
