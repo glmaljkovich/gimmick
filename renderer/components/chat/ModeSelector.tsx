@@ -28,13 +28,19 @@ export const ModeSelector = () => {
     academic: <ModeDisplay icon={<FaBuildingColumns />} mode="academic" />,
     search: <ModeDisplay icon={<MdLanguage />} mode="search" />,
     news: <ModeDisplay icon={<FaRegNewspaper />} mode="news" />,
+    files: <ModeDisplay icon={<FaRegNewspaper />} mode="files" />,
+  };
+
+  const toggleOpen = (event) => {
+    event.preventDefault();
+    setIsOpen((prev) => !prev);
   };
 
   return (
     <div className="relative z-10">
       <button
         className="text-neutral-400 backdrop-blur-xl text-sm border-white/20 border px-2 my-1 rounded-xl"
-        onClick={() => setIsOpen((prev) => !prev)}
+        onClick={toggleOpen}
       >
         {modesToDisplay[mode]}
       </button>

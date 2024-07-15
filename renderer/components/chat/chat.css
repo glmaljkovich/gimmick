@@ -34,3 +34,16 @@
 .ai-message {
     width: calc(100% - 64px);
 }
+
+.ai-message ol {
+    @apply list-decimal list-outside;
+}
+
+.ai-message ol p,
+.ai-message ul p {
+    display: inline-block;
+}
+
+.ai-message ul {
+    @apply list-disc list-inside;
+}

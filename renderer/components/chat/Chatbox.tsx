@@ -1,6 +1,14 @@
 import { ModeSelector } from "./ModeSelector";
-import { useRef, KeyboardEventHandler, FormEventHandler } from "react";
+import {
+  useRef,
+  KeyboardEventHandler,
+  FormEventHandler,
+  useState,
+  useContext,
+  useEffect,
+} from "react";
 import { LuPlusCircle, LuSendHorizonal } from "react-icons/lu";
+import { AppContext } from "../contextProvider";
 
 type ChatBoxProps = {
   value: string;
@@ -8,8 +16,46 @@ type ChatBoxProps = {
   handleSubmit?: FormEventHandler<HTMLFormElement>;
 };
 
+const SelectedFiles = ({ files, setFiles }) => {
+  const removeFile = (file) => {
+    setFiles(files.filter((f) => f !== file));
+  };
+  return (
+    <>
+      {files.length > 0 && (
+        <div className="flex py-2 gap-2 text-xs w-full">
+          {files.map((file) => (
+            <div
+              key={file}
+              className="flex max-w-64 bg-teal-500/30 backdrop-blur-lg text-nowrap overflow-x-hidden rounded-xl py-1 px-2"
+            >
+              <span>{file.split("/").pop()}</span>
+              <span
+                className="font-bold cursor-pointer ml-2"
+                onClick={() => removeFile(file)}
+              >
+                x
+              </span>
+            </div>
+          ))}
+        </div>
+      )}
+    </>
+  );
+};
+
 export const ChatBox = ({ value, onChange, handleSubmit }: ChatBoxProps) => {
+  const { chat: chatCtx } = useContext(AppContext);
+  const { files, setFiles } = chatCtx!;
   const submitRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    window.ipc.on("file-selected", (files: string[]) => {
+      console.log(files);
+      setFiles(files);
+    });
+  }, []);
+
   const handleChange = (event) => {
     autoResizeTextarea(event.target);
     onChange(event);
@@ -25,6 +71,11 @@ export const ChatBox = ({ value, onChange, handleSubmit }: ChatBoxProps) => {
   const autoResizeTextarea = (textarea) => {
     textarea.style.height = "auto"; // Reset the height to auto
     textarea.style.height = textarea.scrollHeight + "px"; // Set the height to the scrollHeight
+  };
+
+  const selectFiles = (event) => {
+    event.preventDefault();
+    window.ipc.send("select-files", null);
   };
 
   return (
@@ -43,8 +94,8 @@ export const ChatBox = ({ value, onChange, handleSubmit }: ChatBoxProps) => {
           rows={1}
         />
         <button
-          ref={submitRef}
-          type="submit"
+          onClick={selectFiles}
+          type="button"
           className="absolute top-3 left-2 text-neutral-400 text-lg"
         >
           <LuPlusCircle />
@@ -57,6 +108,7 @@ export const ChatBox = ({ value, onChange, handleSubmit }: ChatBoxProps) => {
           <LuSendHorizonal />
         </button>
       </div>
+      <SelectedFiles files={files} setFiles={setFiles} />
     </form>
   );
 };

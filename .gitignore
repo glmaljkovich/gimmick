@@ -8,6 +8,7 @@ node_modules
 .next
 next-env.d.ts
 *.env.local
+.env
 
 # build
 /app
@@ -15,3 +16,6 @@ dist
 .DS_Store
 
 .vscode
+
+# python
+venv

@@ -61,7 +61,7 @@ export const search = async (
   messages: CoreMessage[],
   res: Response,
 ) => {
-  const input = messages.at(-1).content as string;
+  const input = messages.pop().content as string;
   const { answer, snippets } = await executeChain(apiKey, input);
 
   const data = new StreamData();

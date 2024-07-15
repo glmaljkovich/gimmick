@@ -23,15 +23,17 @@ import { JSONValue } from "ai";
 const TopBar = ({ chatId }: { chatId: string | null }) => {
   const [chat, setChat] = useState<IChat | null>(null);
   useEffect(() => {
+    window.ipc.on("chat", (_chat: IChat) => {
+      setChat(_chat);
+    });
+  }, []);
+  useEffect(() => {
     if (chatId) {
-      window.ipc.on("chat", (_chat: IChat) => {
-        setChat(_chat);
-      });
       window.ipc.send("chat.get-chat", chatId);
     }
   }, [chatId]);
 
-  function convertToRelativeTime(dateStr: string | undefined) {
+  function convertToRelativeTime(dateStr: string | Date | undefined) {
     if (!dateStr) return "";
     const date = new Date(dateStr);
     return formatDistanceToNow(date, { addSuffix: true });
@@ -58,8 +60,8 @@ function WelcomeScreen() {
 }
 
 export function Chat() {
-  const { chat, model } = useContext(AppContext);
-  const { chatId, setChatId, generatingAnswer, setGeneratingAnswer, mode } =
+  const { chat } = useContext(AppContext);
+  const { chatId, setChatId, setGeneratingAnswer, mode, files, setFiles } =
     chat!;
   const prevIdRef = useRef<string | null>(null);
   const msgRef = useRef<Message[]>([]);
@@ -75,7 +77,7 @@ export function Chat() {
     data,
     isLoading,
   } = useChat({
-    api: "http://localhost:3001/api/generate",
+    api: "http://localhost:3001/api/chat",
     sendExtraMessageFields: true,
     onFinish: (msg) => {
       setGeneratingAnswer(false);
@@ -104,12 +106,20 @@ export function Chat() {
         });
         window.ipc.send("chat.get-chats", null);
       }
+      setFiles([]);
     },
   });
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
+
+  useEffect(() => {
+    window.ipc.on("chat-history", (_messages: IMessage[]) => {
+      console.log("chat.chat-history", _messages);
+      setMessages(_messages as Message[]);
+    });
+  }, []);
 
   useEffect(() => {
     scrollToBottom();
@@ -128,10 +138,6 @@ export function Chat() {
       chatId !== null &&
       (chatId === prevIdRef.current || !prevIdRef.current)
     ) {
-      window.ipc.on("chat-history", (_messages: IMessage[]) => {
-        console.log("chat.chat-history", _messages);
-        setMessages(_messages as Message[]);
-      });
       window.ipc.send("chat.get-chat-history", {
         id: chatId,
       });
@@ -145,8 +151,10 @@ export function Chat() {
     async (event: FormEvent) => {
       event.preventDefault();
       setGeneratingAnswer(true);
+      const finalMode = files.length > 0 ? "files" : mode;
       const body = {
-        mode,
+        mode: finalMode,
+        files,
       };
       handleSubmit(event, { options: { body } });
       scrollToBottom();

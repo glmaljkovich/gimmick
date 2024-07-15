@@ -1,17 +1,19 @@
 import { JSONValue } from "ai";
 import Store from "electron-store";
+import { chat, message, model } from "./db";
 
 export interface IMessage {
   id: string;
   role: string;
   content: string;
+  data?: JSONValue;
 }
 
 export interface IChat {
   title: string;
   id: string;
   messages: IMessage[];
-  createdAt: string;
+  createdAt: string | Date;
   data?: JSONValue;
 }
 
@@ -28,50 +30,53 @@ const defaults: IStore = {
 export const store = new Store<IStore>({ defaults, name: "chat" });
 
 export const initiliazeStore = (ipcMain: Electron.IpcMain) => {
-  ipcMain.on("chat.get-chats", (event) => {
-    event.reply("chats", store.get("chats"));
+  ipcMain.on("chat.get-chats", async (event) => {
+    const chats = await chat.getChats();
+    event.reply("chats", chats);
   });
 
-  ipcMain.on("chat.get-chat", (event, arg) => {
-    const chats = store.get("chats");
-    const chat = chats.find((chat) => chat.id === arg);
-    event.reply("chat", chat);
+  ipcMain.on("chat.get-chat", async (event, id) => {
+    const c = await chat.getChat(id, true);
+    event.reply("chat", c);
   });
 
-  ipcMain.on("chat.add-chat", (_event, arg) => {
-    const chats = store.get("chats");
-    console.log("received chat", arg);
-    chats.push(arg);
-    store.set("chats", chats);
+  ipcMain.on("chat.add-chat", async (_event, arg) => {
+    const c = await chat.addChat(arg);
   });
 
-  ipcMain.on("chat.update-chat", (_event, arg) => {
-    const chats = store.get("chats");
-    const index = chats.findIndex((chat) => chat.id === arg.id);
-    chats[index] = { ...chats[index], ...arg };
-    store.set("chats", chats);
+  ipcMain.on("chat.update-chat", async (_event, arg) => {
+    const c = await chat.updateChat(arg);
   });
 
-  ipcMain.on("chat.get-chat-history", (event, arg) => {
-    const chats = store.get("chats");
+  ipcMain.on("chat.get-chat-history", async (event, arg) => {
     const { id } = arg;
-    const chat = chats.find((chat) => chat.id === id);
-    console.log("chat history", chat?.messages);
-    event.reply("chat-history", chat?.messages);
+    const messages = await chat.getChatHistory(id);
+    event.reply("chat-history", messages);
   });
 
-  ipcMain.on("chat.delete-chat", (_event, arg) => {
-    const chats = store.get("chats");
-    const index = chats.findIndex((chat) => chat.id === arg);
-    chats.splice(index, 1);
-    store.set("chats", chats);
+  ipcMain.on("chat.delete-chat", async (event, id) => {
+    const c = await chat.deleteChat(id);
+    event.reply("chat-deleted", id);
   });
 
-  ipcMain.on("model.set-api-key", (_event, arg) => {
-    store.set("apiKey", arg);
+  ipcMain.on("model.set-api-key", async (_event, arg) => {
+    const { modelId, apiKey } = arg;
+    const c = await model.setApiKey(modelId, apiKey);
   });
 
-  ipcMain.on("model.get-api-key", (event) => {
-    event.reply("api-key", store.get("apiKey"));
+  ipcMain.on("model.get-api-key", async (event) => {
+    const activeModel = await model.getActiveModel();
+    const apiKey = await model.getApiKey(activeModel.modelId);
+    event.reply("api-key", apiKey);
+  });
+
+  ipcMain.on("model.get-active-model", async (event) => {
+    const activeModel = await model.getActiveModel(true);
+    event.reply("active-model", activeModel);
+  });
+
+  ipcMain.on("model.get-models", async (event) => {
+    const models = await model.getModels();
+    event.reply("models", models);
   });
 };

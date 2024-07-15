@@ -8,13 +8,16 @@ export type ChatContextType = {
   setMode: (mode: string) => void;
   generatingAnswer: boolean;
   setGeneratingAnswer: (generatingAnswer: boolean) => void;
+  files: string[];
+  setFiles: (files: string[]) => void;
 };
 
 export const useChatContext = () => {
   const [chatId, setChatId] = useState<string | null>(null);
   const [mode, setMode] = useState("generate");
-  const modes = ["generate", "search", "news", "academic"];
+  const modes = ["generate", "search", "news", "academic", "files"];
   const [generatingAnswer, setGeneratingAnswer] = useState(false);
+  const [files, setFiles] = useState<string[]>([]);
 
   const context: ChatContextType = {
     chatId,
@@ -24,6 +27,8 @@ export const useChatContext = () => {
     setMode,
     generatingAnswer,
     setGeneratingAnswer,
+    files,
+    setFiles,
   };
   return context;
 };
