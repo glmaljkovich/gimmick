@@ -27,16 +27,23 @@
     background: #0d1117;
 }
 
+.ai-message pre {
+    margin: 1em 0;
+}
+
 .ai-message a {
     @apply text-teal-500 bg-gradient-to-tr from-purple-500/20 to-orange-500/20 p-1 rounded-md;
 }
 
 .ai-message {
     width: calc(100% - 64px);
+    @apply tracking-wide;
 }
 
 .ai-message ol {
-    @apply list-decimal list-outside;
+    @apply list-decimal list-inside;
+    white-space: normal;
+    margin-bottom: 1em;
 }
 
 .ai-message ol p,
@@ -46,4 +53,13 @@
 
 .ai-message ul {
     @apply list-disc list-inside;
+    white-space: normal;
+    margin-bottom: 1em;
+}
+
+.ai-message ul ol,
+.ai-message ol ul,
+.ai-message ul ul,
+.ai-message ol ol {
+    margin-left: 1em;
 }

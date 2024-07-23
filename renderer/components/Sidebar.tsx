@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState } from "react";
-import Link from "next/link";
 import { FaSearch } from "react-icons/fa";
 import { VscLibrary } from "react-icons/vsc";
 import { FaHistory } from "react-icons/fa";
@@ -23,7 +22,7 @@ export function Sidebar() {
         <span
           className={twMerge(
             cn(
-              "flex flex-col items-center gap-1",
+              "flex flex-col items-center gap-1 no-drag",
               "text-white/50 text-sm font-light hover:text-white cursor-pointer",
               { "text-white font-medium": selectedTab === text.toLowerCase() },
             ),
@@ -47,10 +46,15 @@ export function Sidebar() {
     router.push(`/${tab}`);
   };
 
+  useEffect(() => {
+    const path = router.pathname.split("/")[1];
+    setSelectedTab(path);
+  }, [router.pathname]);
+
   return (
     <div className="relative flex flex-col w-1/12 min-w-20 h-screen text-white">
       <div className="z-10 flex flex-col grow py-4 px-2 font-light">
-        <div className="flex flex-col text-center text-teal-300 font-bold tracking-wide mt-2 text-sm">
+        <div className="flex flex-col text-center text-teal-300 font-bold tracking-wide mt-8 text-sm">
           <span className="text-xl">✨</span> gimmick
         </div>
         <div className="flex grow justify-center flex-col gap-4">

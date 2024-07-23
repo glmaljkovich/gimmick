@@ -8,6 +8,7 @@ type APIRequest = {
   messages: CoreMessage[];
   mode: "search" | "generate" | "files";
   files?: string[];
+  contentFilter?: "academic" | "news" | "social";
 };
 
 export const answer = (apiKey: string) =>

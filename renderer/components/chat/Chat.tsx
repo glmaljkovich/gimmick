@@ -1,63 +1,17 @@
 "use client";
-import { Message, useChat, useCompletion } from "ai/react";
-import {
-  FormEvent,
-  memo,
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { Message, useChat } from "ai/react";
+import { FormEvent, useCallback, useContext, useEffect, useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { IChat, IMessage } from "../../../main/store";
+import { IMessage } from "../../../main/store";
 import { AppContext } from "@/components/contextProvider";
 import { ChatBox } from "./Chatbox";
 import "highlight.js/styles/github-dark.css";
 import "./chat.css";
-import { formatDistanceToNow } from "date-fns";
-import { FaClock } from "react-icons/fa";
-import { ChatMessage, SearchResultsSkeleton } from "./ChatMessage";
+import { ChatMessage } from "./ChatMessage";
+import { SearchResultsSkeleton } from "./SearchResults";
+import { WelcomeScreen } from "./WelcomeScreen";
 import { JSONValue } from "ai";
-
-const TopBar = ({ chatId }: { chatId: string | null }) => {
-  const [chat, setChat] = useState<IChat | null>(null);
-  useEffect(() => {
-    window.ipc.on("chat", (_chat: IChat) => {
-      setChat(_chat);
-    });
-  }, []);
-  useEffect(() => {
-    if (chatId) {
-      window.ipc.send("chat.get-chat", chatId);
-    }
-  }, [chatId]);
-
-  function convertToRelativeTime(dateStr: string | Date | undefined) {
-    if (!dateStr) return "";
-    const date = new Date(dateStr);
-    return formatDistanceToNow(date, { addSuffix: true });
-  }
-
-  return (
-    <div className="text-sm flex items-center p-4 pb-2 gap-2">
-      {chat?.createdAt && <FaClock className="text-white/50" />}
-      <div className="text-white/50">
-        {convertToRelativeTime(chat?.createdAt)}
-      </div>
-    </div>
-  );
-};
-
-function WelcomeScreen() {
-  return (
-    <div className="flex flex-col items-center justify-center h-1/2">
-      <div className="text-4xl font-thin text-white text-center">
-        The world at your fingertips.
-      </div>
-    </div>
-  );
-}
+import { TopBar } from "./TopBar";
 
 export function Chat() {
   const { chat } = useContext(AppContext);
@@ -115,10 +69,11 @@ export function Chat() {
   };
 
   useEffect(() => {
-    window.ipc.on("chat-history", (_messages: IMessage[]) => {
+    const remover = window.ipc.on("chat-history", (_messages: IMessage[]) => {
       console.log("chat.chat-history", _messages);
       setMessages(_messages as Message[]);
     });
+    return remover;
   }, []);
 
   useEffect(() => {
@@ -165,7 +120,7 @@ export function Chat() {
   return (
     <div className="relative bg-gradient-to-t to-50% from-purple-500/10 h-full flex flex-col text-white w-full overflow-hidden">
       <div className="overflow-y-auto h-full">
-        <TopBar chatId={chatId} />
+        {chatId && <TopBar chatId={chatId} />}
         {chatId === null && !isLoading ? <WelcomeScreen /> : null}
         <div className="px-4 mb-16">
           {messages.map((m) => (

@@ -30,6 +30,7 @@ const defaults: IStore = {
 export const store = new Store<IStore>({ defaults, name: "chat" });
 
 export const initiliazeStore = (ipcMain: Electron.IpcMain) => {
+  // Chat listeners
   ipcMain.on("chat.get-chats", async (event) => {
     const chats = await chat.getChats();
     event.reply("chats", chats);
@@ -41,7 +42,9 @@ export const initiliazeStore = (ipcMain: Electron.IpcMain) => {
   });
 
   ipcMain.on("chat.add-chat", async (_event, arg) => {
+    console.log("Adding chat", arg);
     const c = await chat.addChat(arg);
+    console.log("Chat added", c);
   });
 
   ipcMain.on("chat.update-chat", async (_event, arg) => {
@@ -59,19 +62,24 @@ export const initiliazeStore = (ipcMain: Electron.IpcMain) => {
     event.reply("chat-deleted", id);
   });
 
+  // Model listeners
   ipcMain.on("model.set-api-key", async (_event, arg) => {
     const { modelId, apiKey } = arg;
+    console.log("Setting API Key", modelId, apiKey);
     const c = await model.setApiKey(modelId, apiKey);
+    console.log("API Key set", c);
   });
 
   ipcMain.on("model.get-api-key", async (event) => {
-    const activeModel = await model.getActiveModel();
-    const apiKey = await model.getApiKey(activeModel.modelId);
+    const activeModel = await model.getActiveModel(true);
+    const apiKey = activeModel?.model?.apiKey;
     event.reply("api-key", apiKey);
   });
 
   ipcMain.on("model.get-active-model", async (event) => {
+    console.log("Getting active model");
     const activeModel = await model.getActiveModel(true);
+    console.log("Active model", activeModel);
     event.reply("active-model", activeModel);
   });
 

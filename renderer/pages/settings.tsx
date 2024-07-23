@@ -4,7 +4,7 @@ import { useContext, useState } from "react";
 // takes an api key from an input component and send it to the store via ipc
 const ModelSelect = () => {
   const { model: modelCtx } = useContext(AppContext);
-  const { models, setModels, model, setModel } = modelCtx!;
+  const { models, model, setModel } = modelCtx!;
   const [apiKey, setApiKey] = useState(model?.apiKey || "");
 
   const handleApiKeyChange = (e) => {
@@ -33,7 +33,7 @@ const ModelSelect = () => {
       </select>
       <h2 className="px-2">API Key</h2>
       <input
-        type="text"
+        type="password"
         value={apiKey}
         onChange={handleApiKeyChange}
         className="p-2 m-2 border border-white/20 bg-black/20 rounded-md"

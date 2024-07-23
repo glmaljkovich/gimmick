@@ -1,4 +1,4 @@
-import { ActiveModel, Model } from "@prisma/client";
+import { ActiveModel, Model } from ".prisma/client";
 import { useEffect, useState } from "react";
 
 export type ModelContextType = {
@@ -13,15 +13,19 @@ export const useModelContext = () => {
   const [models, setModels] = useState<Model[]>([]);
 
   useEffect(() => {
-    window.ipc.on("active-model", (active: any) => {
+    const listener1 = window.ipc.on("active-model", (active: any) => {
       console.log("model received", active);
       setModel(active.model);
     });
     window.ipc.send("model.get-active-model", true);
-    window.ipc.on("models", (models: Model[]) => {
+    const listener2 = window.ipc.on("models", (models: Model[]) => {
       setModels(models);
     });
     window.ipc.send("model.get-models", null);
+    return () => {
+      listener1();
+      listener2();
+    };
   }, []);
 
   const context: ModelContextType = {

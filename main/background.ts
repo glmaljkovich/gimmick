@@ -5,7 +5,7 @@ import serve from "electron-serve";
 import { createWindow } from "./helpers";
 import { initiliazeStore } from "./store";
 import server from "./api";
-import { migrateFromStore } from "./db";
+import { runMigrations } from "./db/init";
 
 const isProd = process.env.NODE_ENV === "production";
 
@@ -30,10 +30,13 @@ process.env.DATABASE_URL = `file:${dbPath}`;
   const mainWindow = createWindow("main", {
     width: 1200,
     height: 700,
+    titleBarStyle: "hidden",
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
     },
   });
+
+  await runMigrations();
 
   if (isProd) {
     await mainWindow.loadURL("app://./ask");

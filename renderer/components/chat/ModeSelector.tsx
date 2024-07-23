@@ -4,6 +4,7 @@ import { FaRegNewspaper } from "react-icons/fa6";
 import { MdLanguage } from "react-icons/md";
 import { FaBuildingColumns } from "react-icons/fa6";
 import { FaMagic } from "react-icons/fa";
+import { FaFileAlt } from "react-icons/fa";
 
 export const ModeSelector = () => {
   const { chat } = useContext(AppContext);
@@ -28,7 +29,7 @@ export const ModeSelector = () => {
     academic: <ModeDisplay icon={<FaBuildingColumns />} mode="academic" />,
     search: <ModeDisplay icon={<MdLanguage />} mode="search" />,
     news: <ModeDisplay icon={<FaRegNewspaper />} mode="news" />,
-    files: <ModeDisplay icon={<FaRegNewspaper />} mode="files" />,
+    files: <ModeDisplay icon={<FaFileAlt />} mode="files" />,
   };
 
   const toggleOpen = (event) => {

@@ -14,12 +14,12 @@ export default function Layout({ children }) {
       <div
         className={
           bitter.className +
-          " relative flex w-full h-full bg-black/50 overflow-hidden"
+          " relative flex w-full h-full bg-black/50 overflow-hidden drag"
         }
       >
         <GradientBar className="from-blue-500 h-32 w-full -top-2 left-1/2 opacity-25 -translate-x-1/2 scale-150" />
         <Sidebar />
-        <div className="my-2 mr-2 border border-white/20 rounded-md w-11/12">
+        <div className="my-2 mr-2 border border-white/20 rounded-md w-11/12 no-drag">
           {children}
         </div>
       </div>

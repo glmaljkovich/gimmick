@@ -1,39 +1,23 @@
-import { PrismaClient } from "@prisma/client";
+import { drizzle } from "drizzle-orm/better-sqlite3";
+import Database from "better-sqlite3";
+import { app } from "electron";
+import path from "path";
+
+import * as schema from "./schema";
 import { Chat } from "./chat";
+import { File } from "./file";
 import { Message } from "./message";
 import { Model } from "./model";
-import { store } from "../store";
+import { Topic } from "./topics";
 
-const prisma = new PrismaClient();
+const userDataPath = app.getPath("userData");
+const dbPath = path.join(userDataPath, "gimmick.db");
 
-export const chat = Chat(prisma);
-export const message = Message(prisma);
-export const model = Model(prisma);
+const sqlite = new Database(dbPath);
 
-export async function migrateFromStore() {
-  const messages = [];
-  const chats = store.get("chats").map((c) => {
-    c.messages.forEach((m) =>
-      messages.push({
-        ...m,
-        data: JSON.stringify(m.data || "{}"),
-        chatId: c.id,
-      }),
-    );
-    return {
-      id: c.id,
-      title: c.title,
-      createdAt: c.createdAt,
-    };
-  });
-  if (chats.length) {
-    const chatsCreated = await prisma.chat.createMany({
-      data: chats,
-    });
-    console.log("chats created: ", chatsCreated);
-    const messagesCreated = await prisma.message.createMany({
-      data: messages,
-    });
-    console.log("messages created: ", messagesCreated);
-  }
-}
+export const db = drizzle(sqlite, { schema });
+export const chat = Chat(db);
+export const file = File(db);
+export const message = Message(db);
+export const model = Model(db);
+export const topic = Topic(db);

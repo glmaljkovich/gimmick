@@ -1,37 +1,58 @@
-import { PrismaClient } from "@prisma/client";
+import { eq } from "drizzle-orm";
+import { models, activeModels } from "./schema";
+import * as schema from "./schema";
+import { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
 
-export function Model(prisma: PrismaClient) {
+export function Model(db: BetterSQLite3Database<typeof schema>) {
   return {
     async getModels() {
-      return prisma.model.findMany();
+      return db.select().from(models).all();
     },
+
     async getModel(id: string) {
-      return prisma.model.findUnique({ where: { id } });
+      return db.select().from(models).where(eq(models.id, id)).all();
     },
+
     async addModel(model: any) {
-      return prisma.model.create({ data: model });
+      return db.insert(models).values(model).returning().all();
     },
+
     async updateModel(model: any) {
-      return prisma.model.update({
-        where: { id: model.id },
-        data: model,
-      });
+      const { id, ...data } = model;
+      return db
+        .update(models)
+        .set(data)
+        .where(eq(models.id, id))
+        .returning()
+        .all();
     },
+
     async deleteModel(id: string) {
-      return prisma.model.delete({ where: { id } });
+      return db.delete(models).where(eq(models.id, id)).returning().all();
     },
+
     async getApiKey(modelId: string) {
-      const model = await prisma.model.findUnique({ where: { id: modelId } });
-      return model.apiKey;
+      const result = await db
+        .select({ apiKey: models.apiKey })
+        .from(models)
+        .where(eq(models.id, modelId));
+      return result[0]?.apiKey;
     },
+
     async setApiKey(modelId: string, apiKey: string) {
-      return prisma.model.update({
-        where: { id: modelId },
-        data: { apiKey },
-      });
+      return db
+        .update(models)
+        .set({ apiKey })
+        .where(eq(models.id, modelId))
+        .returning()
+        .all();
     },
+
     async getActiveModel(includeModel = false) {
-      return prisma.activeModel.findFirst({ include: { model: includeModel } });
+      const result = await db.query.activeModels.findFirst({
+        with: { model: true },
+      });
+      return result;
     },
   };
 }
