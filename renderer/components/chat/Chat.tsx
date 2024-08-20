@@ -123,12 +123,13 @@ export function Chat() {
         {chatId && <TopBar chatId={chatId} />}
         {chatId === null && !isLoading ? <WelcomeScreen /> : null}
         <div className="px-4 mb-16">
-          {messages.map((m) => (
+          {messages.map((m, i) => (
             <ChatMessage
               key={m.id}
               role={m.role}
               content={m.content}
               data={m.data || data}
+              index={i}
             />
           ))}
           {isLoading && messages.length < 2 && <SearchResultsSkeleton />}

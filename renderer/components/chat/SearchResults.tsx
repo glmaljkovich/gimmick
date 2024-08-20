@@ -1,9 +1,12 @@
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import Image from "next/image";
 
-export const SearchResultsSkeleton = () => {
+export const SearchResultsSkeleton1 = () => {
   return (
     <div className="grid grid-cols-4 min-h-24 w-full gap-4 mb-4 justify-center items-center">
-      <div className="col-span-4 text-xs font-bold">Search Results</div>
+      <div className="col-span-4 text-xs font-bold animate-pulse">
+        Searching...
+      </div>
       {[1, 2, 3, 4].map((index) => (
         <div
           key={index}
@@ -14,6 +17,42 @@ export const SearchResultsSkeleton = () => {
         </div>
       ))}
     </div>
+  );
+};
+
+export const SearchResultsSkeleton = () => {
+  return (
+    <motion.div layout className="flex pt-8 w-full">
+      <div className="flex flex-col items-center shrink-0">
+        <AnimatePresence>
+          <motion.div layoutId="gimmick">
+            <Image
+              className="rounded-full mr-2"
+              src="/images/clippy.webp"
+              alt="Logo image"
+              width={36}
+              height={36}
+            />
+          </motion.div>
+        </AnimatePresence>
+      </div>
+      <div className="ai-message shrink text-base leading-normal mb-8 px-2">
+        <div className="grid grid-cols-4 min-h-24 w-full gap-4 mb-4 justify-center items-center">
+          <div className="col-span-4 text-xs font-bold animate-pulse">
+            Searching...
+          </div>
+          {[1, 2, 3, 4].map((index) => (
+            <div
+              key={index}
+              className="flex flex-col min-w-24 animate-pulse justify-between p-2 h-full rounded-xl bg-gradient-to-tr from-blue-500/20 to-pink-500/20"
+            >
+              <div className="w-3/4 h-4 bg-white/20 rounded-full"></div>
+              <div className="w-1/2 h-4 bg-white/20 rounded-full"></div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </motion.div>
   );
 };
 

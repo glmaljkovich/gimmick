@@ -19,7 +19,15 @@ const UserMessage = memo(({ content }: { content: string }) => {
 });
 
 const AIMessage = memo(
-  ({ content, data }: { content: string; data?: JSONValue[] }) => {
+  ({
+    content,
+    data,
+    index,
+  }: {
+    content: string;
+    data?: JSONValue[];
+    index: number;
+  }) => {
     const results =
       data && data.length > 0
         ? (JSON.parse(data.at(-1)!["snippets"]) as SearchResult[])
@@ -51,16 +59,22 @@ export const ChatMessage = memo(
     role,
     content,
     data,
+    index,
   }: {
     role: string;
     content: string;
     data?: JSONValue;
+    index: number;
   }) => {
     return (
       <div className="whitespace-pre-wrap">
         {role === "user" && <UserMessage content={content} />}
         {role === "assistant" && (
-          <AIMessage content={content} data={data as JSONValue[]} />
+          <AIMessage
+            content={content}
+            data={data as JSONValue[]}
+            index={index}
+          />
         )}
       </div>
     );

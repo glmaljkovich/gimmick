@@ -78,7 +78,7 @@ export const chatTopics = sqliteTable(
   "ChatTopics",
   {
     topicId: integer("topicId").references(() => topics.id),
-    chatId: text("chatId").references(() => chats.id),
+    chatId: text("chatId").references(() => chats.id, { onDelete: "cascade" }),
   },
   (table) => {
     return {

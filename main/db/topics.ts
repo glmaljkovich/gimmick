@@ -58,7 +58,8 @@ export function Topic(db: BetterSQLite3Database<typeof schema>) {
         .from(chatTopics)
         .where(eq(chatTopics.topicId, topicId))
         .all()
-        .map((c) => c.chatId);
+        .map((c) => c.chatId)
+        .filter((id): id is string => id !== null);
       return db
         .select()
         .from(schema.chats)
@@ -73,7 +74,15 @@ export function Topic(db: BetterSQLite3Database<typeof schema>) {
         .where(eq(chatTopics.chatId, chatId))
         .all()
         .map((c) => c.topicId)[0];
-      return db.select().from(schema.topics).where(eq(topics.id, topic)).all();
+      if (topic !== null) {
+        return db
+          .select()
+          .from(schema.topics)
+          .where(eq(topics.id, topic))
+          .all();
+      } else {
+        return [];
+      }
     },
   };
 }

@@ -9,10 +9,11 @@ export const TopBar = ({ chatId }: { chatId: string | null }) => {
   const [topic, setTopic] = useState<any | null>(null);
   const [topics, setTopics] = useState<any[]>([]);
   useEffect(() => {
-    window.ipc.on("chat", (_chat: IChat) => {
+    const listener = window.ipc.on("chat", (_chat: IChat) => {
       console.log("chat", _chat);
       setChat(_chat);
     });
+    return listener;
   }, []);
   useEffect(() => {
     if (chatId) {
