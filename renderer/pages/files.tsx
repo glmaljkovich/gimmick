@@ -125,6 +125,10 @@ export default function Files() {
       .then((data) => {
         setLoading(false);
         setFiles(data);
+      })
+      .catch((e) => {
+        setLoading(false);
+        console.error(e);
       });
   }
 

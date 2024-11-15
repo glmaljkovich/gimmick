@@ -1,19 +1,15 @@
-<p align="center"><img src="https://i.imgur.com/a9QWW0v.png"></p>
+# Gimmick
 
-## Usage
+Your desktop AI assistant. Chat with your files and search the internet.
+Keep your conversations in your computer.
 
-### Create an App
+![Gimmick screenshot](/gimmick.png)
 
-```
-# with npx
-$ npx create-nextron-app my-app --example with-tailwindcss
+## Set up
+You'll need to go to `Settings` and provide an OpenAI developer API key.
+The application runs a server on port `3001` so you want to make sure there's nothing else running there.
 
-# with yarn
-$ yarn create nextron-app my-app --example with-tailwindcss
-
-# with pnpm
-$ pnpm dlx create-nextron-app my-app --example with-tailwindcss
-```
+## Development
 
 ### Install Dependencies
 
@@ -27,12 +23,18 @@ $ yarn (or `npm install`)
 $ pnpm install --shamefully-hoist
 ```
 
-### Use it
-
+### Run in development mode
 ```
 # development mode
 $ yarn dev (or `npm run dev` or `pnpm run dev`)
 
+# production build
+$ yarn build (or `npm run build` or `pnpm run build`)
+```
+
+### Create an executable
+
+```
 # production build
 $ yarn build (or `npm run build` or `pnpm run build`)
 ```
